@@ -1,0 +1,73 @@
+﻿@model List<NewsFeedAppl.Models.FeedDetailsModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>BBC News Feed</h2>
+
+<div class="col-md-12">
+    <br />
+    <h4>Top five latest News Feeds from BBC World, Click load more at bottom of the page to view more News feeds</h4>
+    <hr />
+
+    @foreach (var item in Model)
+    {
+        <div class="col-md-12">
+            <p class="pull-right">@item.PublishDate</p>
+            <h2>@item.Title</h2>
+            <p>@item.Summary</p>
+            <p><a class="btn btn-default" href="@item.Url" target="_blank">Read more...</a></p>
+        </div>
+    }
+    <div id="feeds"></div>
+</div>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-2 col-md-offset-5"><a class="btn btn-default" id="loadMoreFeeds">Load more...</a></div>
+    </div>
+
+</div>
+
+<script>
+    $('#loadMoreFeeds').click(function () {        
+        $.ajax({
+            url: '/api/NewsFeedApi',
+            contentType: 'application/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'html'
+
+        })
+        .success(function (result) {
+            //setGetParameter('c', '10');       
+            $('#feeds').html(result);
+        })
+        .error(function (xhr, status) {
+            alert(status);
+        })
+        
+    });
+
+    //function setGetParameter(paramName, paramValue) {
+    //    var url = window.location.href;        
+    //    var hash = location.hash;
+    //    url = url.replace(hash, '');
+    //    if (url.indexOf(paramName + "=") >= 0) {
+    //        var prefix = url.substring(0, url.indexOf(paramName));
+    //        var suffix = url.substring(url.indexOf(paramName));
+    //        suffix = suffix.substring(suffix.indexOf("=") + 1);
+    //        suffix = (suffix.indexOf("&") >= 0) ? suffix.substring(suffix.indexOf("&")) : "";
+    //        url = prefix + paramName + "=" + paramValue + suffix;
+    //    }
+    //    else {
+            
+    //        if (url.indexOf("?") < 0)
+                
+    //            url += "?" + paramName + "=" + paramValue;
+    //        else
+    //            url += "&" + paramName + "=" + paramValue;
+    //    }
+    //    window.location.href = url + hash;
+    //}
+</script>
